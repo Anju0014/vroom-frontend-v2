@@ -66,14 +66,14 @@ const Sidebar: React.FC = () => {
       icon: <CheckCircleIcon size={18} /> 
     },
     { 
-      name: "Car Verification ", 
-      path: "/admin/dashboard/carVerification", 
-      icon: <CheckCircleIcon size={18} /> 
-    },
-    { 
       name: "Cars", 
       path: "/admin/dashboard/cars", 
       icon: <Car size={18} /> 
+    },
+    { 
+      name: "Car Verification ", 
+      path: "/admin/dashboard/carVerification", 
+      icon: <CheckCircleIcon size={18} /> 
     },
     { 
       name: "Bookings", 

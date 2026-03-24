@@ -445,7 +445,12 @@ export default function UpdateComplaintModal({
                   <Eye className="w-3.5 h-3.5 text-blue-500" />
                   <span className="font-medium">Attachments</span>
                 </div>
-                <a
+                 <img
+            src={complaint.complaintProof}
+            alt={`complaintProof`}
+            className="w-full h-full object-cover"
+          />
+                {/* <a
                   href={complaint.complaintProof}
                   target="_blank"
                   rel="noopener noreferrer"
@@ -453,7 +458,7 @@ export default function UpdateComplaintModal({
                 >
                   <Eye size={16} />
                   View Document
-                </a>
+                </a> */}
               </div>
             )}
           </div>

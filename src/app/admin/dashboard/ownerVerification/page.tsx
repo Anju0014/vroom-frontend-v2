@@ -57,7 +57,7 @@ const OwnerVerifyPage: React.FC<OwnerVerifyProps> = ({ userType }) => {
        console.log(response.data)
       const filteredUsers = response.data
         .map((user: any) => ({
-          id: user._id,
+          id: user._id||user.id,
           name: user.fullName,
           email: user.email,
           document: user.idProof,

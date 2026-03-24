@@ -130,8 +130,8 @@ setCurrentPage(response.data.page);
   }
 
   return (
-    <div className="bg-gradient-to-b from-blue-200 to-yellow-200 p-4 min-h-screen">
-      <div className="max-w-4xl mx-auto">
+    <div className="bg-gradient-to-b from-blue-200 to-yellow-200 p-4 min-h-screen ">
+      <div className="max-w-4xl mx-auto p-6">
       
         <div className="bg-gradient-to-r from-blue-600 to-purple-600 rounded-2xl p-8 shadow-xl mb-6">
           <div className="flex items-center justify-between mb-4">
@@ -152,7 +152,7 @@ setCurrentPage(response.data.page);
         </div>
 
         {/* Transactions Section */}
-        <div className="bg-white rounded-2xl shadow-xl overflow-hidden">
+        <div className="bg-white rounded-2xl shadow-xl overflow-hidden mb-4 p-4">
           <div className="p-6 border-b border-gray-200">
             <h2 className="text-xl font-bold text-gray-800">Transaction History</h2>
             <p className="text-sm text-gray-500 mt-1">
@@ -213,14 +213,6 @@ setCurrentPage(response.data.page);
                   </tbody>
                 </table>
               </div>
-              
-              {totalPages > 1 && (
-                <Pagination
-                  currentPage={currentPage}
-                  totalPages={totalPages}
-                  onPageChange={handlePageChange}
-                />
-              )}
             </>
           ) : (
             <div className="p-12 text-center">
@@ -230,6 +222,13 @@ setCurrentPage(response.data.page);
             </div>
           )}
         </div>
+          {totalPages > 1 && (
+                <Pagination
+                  currentPage={currentPage}
+                  totalPages={totalPages}
+                  onPageChange={handlePageChange}
+                />
+              )}
       </div>
     </div>
   );

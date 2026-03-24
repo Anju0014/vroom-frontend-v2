@@ -162,7 +162,6 @@ const AdminComplaintsPage: React.FC = () => {
         </div>
       )}
 
-      {/* Search Input */}
       <div className="mb-6">
         <div className="relative max-w-md">
           <input

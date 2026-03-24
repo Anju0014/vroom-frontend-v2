@@ -194,6 +194,7 @@ export interface SignupData {
     phoneNumber?: string;
     profileImage?: string;
     address?:Address;
+    idProof?:string;
   }
 
   export interface EditProfileModalProps {

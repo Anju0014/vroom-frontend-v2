@@ -1,6 +1,6 @@
 "use client";
 
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import { z } from "zod";
 import { toast } from "react-hot-toast";
 import { ownerRegisterSchema } from "@/lib/validation";
@@ -9,6 +9,7 @@ import InputField from "@/components/InputField";
 import FileUpload from "@/components/FileUpload";
 import { Address, CarOwner } from "@/types/authTypes";
 import LoadingButton from "@/components/common/LoadingButton";
+import Image from "next/image";
 
 interface CompleteRegistrationFormProps {
   ownerDetails: CarOwner;
@@ -19,12 +20,13 @@ const CompleteRegistrationForm: React.FC<CompleteRegistrationFormProps> = ({ own
   const [formData, setFormData] = useState({
     phoneNumber: ownerDetails.phoneNumber || "",
     altPhoneNumber: "",
-    idProof: "",
+    idProof: ownerDetails.idProof || "",
     address: ownerDetails.address || { addressLine1: "", city: "", state: "", postalCode: "", country: "" },
   });
 
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState<string | null>(null);
+
 
   const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const { name, value } = e.target;
@@ -82,12 +84,19 @@ const CompleteRegistrationForm: React.FC<CompleteRegistrationFormProps> = ({ own
 
       {error && <p className="text-red-500 text-center">{error}</p>}
 
+     
+
       <form onSubmit={handleSubmit} className="space-y-4">
         <InputField label="Phone Number *" name="phoneNumber" type="text" value={formData.phoneNumber} onChange={handleChange} placeholder="Enter your primary phone number"   className="focus:ring-blue-500 focus:border-blue-500"/>
         <InputField label="Alternate Phone Number" name="altPhoneNumber" type="text" value={formData.altPhoneNumber} onChange={handleChange}  placeholder="Enter an alternate phone number (optional)"  className="focus:ring-blue-500 focus:border-blue-500"  />
 
         <div>
           <label className="block font-semibold text-gray-700">Upload ID Proof *</label>
+          {formData.idProof && 
+          <img
+            src={`formData.idProof`}
+           alt="idProof"/>}
+
           <FileUpload accept="image/*,application/pdf" multiple={false} onUploadComplete={handleFileUpload} />
           {formData.idProof && <p className="text-green-600 mt-1">File uploaded successfully.</p>}
         </div>

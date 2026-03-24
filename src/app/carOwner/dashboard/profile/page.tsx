@@ -31,6 +31,7 @@ const ProfilePage = () => {
         console.log("data",data)
         setOwnerDetails(data.carOwner);
         setIdProof(data.carOwner.idProof || null);
+        console.log(data.carOwner.idProof)
         setProcessStatus(data.carOwner.processStatus); 
         setVerifyStatus(data.carOwner.verifyStatus);
         if (data.carOwner.verifyStatus === -1) {
@@ -117,18 +118,20 @@ const ProfilePage = () => {
   // Show rejection message if processStatus = 1 and verifyStatus = -1
   if (verifyStatus === -1 && processStatus === 2) {
     return (
-      <div className="flex flex-col items-center justify-center min-h-screen bg-gray-100 p-6">
-        <div className="bg-white p-6 shadow-lg rounded-md text-center max-w-xl">
+      <div className="flex justify-center items-center min-h-screen bg-gray-100 p-6">
+        <div className="bg-white p-6 shadow-lg rounded-md text-center">
           <AlertTriangle className="text-red-500 w-12 h-12 mx-auto mb-4" />
           <h2 className="text-xl font-semibold text-red-600">Verification Rejected</h2>
           <p className="text-gray-600 mt-2">
             Your previous verification request was rejected. Please complete your registration again.
             {rejectReason && <span className="block mt-2 font-semibold text-red-500">Reason: {rejectReason}</span>}
           </p>
+         
           <div className="mt-4">
             <CompleteRegistrationForm ownerDetails={ownerDetails}  onCompleted={handleRegistrationCompleted} />
           </div>
-        </div>
+           </div>
+        
       </div>
     );
   }
