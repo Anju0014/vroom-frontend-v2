@@ -24,16 +24,26 @@ export const S3Service = {
     });
   },
 
-   async getPresignedUploadUrl(file: File) {
-    const res = await api.post(API_ROUTES.s3.presignedUpload, {
-      fileName: file.name,
-      fileType: file.type,
-    });
-    return res.data; // { uploadUrl, key }
-  },
+  //  async getPresignedUploadUrl(file: File) {
+  //   const res = await api.post(API_ROUTES.s3.presignedUpload, {
+  //     fileName: file.name,
+  //     fileType: file.type,
+  //   });
+  //   return res.data; // { uploadUrl, key }
+  // },
+
+  async getPresignedUploadUrl(file: File, isPublic = false) {
+  const res = await api.post(API_ROUTES.s3.presignedUpload, {
+    fileName: file.name,
+    fileType: file.type,
+    isPublic, // ✅ send to backend
+  });
+  return res.data; // { uploadUrl, key }
+},
     async getPresignedViewUrl(key: string) {
     const res = await api.get(
-      `${API_ROUTES.s3.presignedView}?key=${key}`
+      // `${API_ROUTES.s3.presignedView}?key=${key}`
+      `${API_ROUTES.s3.presignedView}?key=${encodeURIComponent(key)}`
     );
     return res.data.url;
   },

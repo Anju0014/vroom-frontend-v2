@@ -12,6 +12,8 @@ import toast from 'react-hot-toast';
 
 import { Car, CarFormData } from '@/types/authTypes';
 import LoadingButton from '../common/LoadingButton';
+import { S3Service } from '@/services/common/s3Service';
+import { usePrivateFile } from '@/hooks/usePrivateFile';
 
 interface EditCarModalProps {
   isOpen: boolean;
@@ -30,7 +32,9 @@ export default function EditCarModal({
   onUpdateCar,
 }: EditCarModalProps) {
   const [mounted, setMounted] = useState(false);
-
+  //   const [insuranceUrl, setInsuranceUrl] = useState<string | null>(null);
+  // const [rcBookUrl, setRCBookUrl] = useState<string | null>(null);
+  
   const [formData, setFormData] = useState<CarFormData>({
     carName: car.carName || '',
     brand: car.brand || '',
@@ -43,7 +47,7 @@ export default function EditCarModal({
       car.location || {
         address: '',
         landmark: '',
-        coordinates: { lat: null, lng: null },
+        coordinates: { lat: 0, lng: 0 },
       },
     images: car.images || [],
     videos: car.videos || [],
@@ -52,6 +56,11 @@ export default function EditCarModal({
     insuranceProof: car.insuranceProof || '',
   });
 
+  const { url: insuranceUrl, loading: insuranceLoading } =
+  usePrivateFile(formData.insuranceProof);
+  const { url: rcBookUrl, loading: rcLoading } =
+  usePrivateFile(formData.rcBookProof);
+  
   useEffect(() => {
     setMounted(true);
     return () => setMounted(false);
@@ -79,8 +88,32 @@ export default function EditCarModal({
         rcBookProof: car.rcBookProof || '',
         insuranceProof: car.insuranceProof || '',
       });
+      
     }
   }, [car, isOpen]);
+
+
+
+// useEffect(() => {
+//   const loadInsuranceFile = async () => {
+//     if (!formData.insuranceProof) return;
+
+//     const url = await S3Service.getPresignedViewUrl(formData.insuranceProof);
+//     setInsuranceUrl(url);
+//   };
+
+//   loadInsuranceFile();
+// }, [formData.insuranceProof]);
+// useEffect(() => {
+//   const loadRCBookFile = async () => {
+//     if (!formData.rcBookProof) return;
+
+//     const url = await S3Service.getPresignedViewUrl(formData.rcBookProof);
+//     setRCBookUrl(url);
+//   };
+
+//   loadRCBookFile();
+// }, [formData.rcBookProof]);
 
   const handleChange = (
     e: React.ChangeEvent<HTMLInputElement | HTMLSelectElement>
@@ -290,7 +323,7 @@ export default function EditCarModal({
             <h3 className="text-lg font-semibold mb-4">Car Location</h3>
 
             <div className="h-72 w-full rounded-lg overflow-hidden border">
-              <LocationPicker
+              {/* <LocationPicker
                 onSelectLocation={(lat, lng, address, landmark) => {
                   setFormData((prev) => ({
                     ...prev,
@@ -302,7 +335,21 @@ export default function EditCarModal({
                     },
                   }));
                 }}
-              />
+              /> */}
+              <LocationPicker
+  initialCoordinates={formData.location.coordinates}
+  onSelectLocation={(lat, lng, address, landmark) => {
+    setFormData((prev) => ({
+      ...prev,
+      location: {
+        ...prev.location,
+        coordinates: { lat, lng },
+        address: address || prev.location.address,
+        landmark: landmark || prev.location.landmark,
+      },
+    }));
+  }}
+/>
             </div>
 
             {formData.location.coordinates?.lat != null &&
@@ -366,6 +413,7 @@ export default function EditCarModal({
                 accept="image/*"
                 multiple
                 maxFiles={Math.max(0, 5 - formData.images.length)}
+                  isPublic={true}
                 onUploadComplete={(uploaded) => {
                   const urls = Array.isArray(uploaded) ? uploaded : [uploaded];
                   const safe = urls.filter(Boolean) as string[];
@@ -410,6 +458,7 @@ export default function EditCarModal({
                   accept="video/*"
                   multiple={false}
                   maxFiles={1}
+                    isPublic={true}
                   onUploadComplete={(uploaded) => {
                     const url =
                       typeof uploaded === 'string' ? uploaded : uploaded?.[0];
@@ -431,9 +480,10 @@ export default function EditCarModal({
               <FileUpload
                 accept="image/*,application/pdf"
                 multiple={false}
+                  isPublic={false}
                 onUploadComplete={handleFileInsuranceUpload}
               />
-              {formData.insuranceProof && (
+              {/* {formData.insuranceProof && (
                 <div className="mt-2 text-sm">
                   {formData.insuranceProof.toLowerCase().endsWith('.pdf') ? (
                     <a
@@ -452,7 +502,22 @@ export default function EditCarModal({
                     />
                   )}
                 </div>
-              )}
+              )} */}
+               {insuranceLoading ? (
+  <p>Loading...</p>
+) : insuranceUrl && (
+  formData.insuranceProof.toLowerCase().endsWith(".pdf") ? (
+    <a href={insuranceUrl} target="_blank" rel="noreferrer">
+      View uploaded PDF
+    </a>
+  ) : (
+    <img
+      src={insuranceUrl}
+      alt="Insurance Proof"
+      className="w-28 h-28 object-cover rounded border"
+    />
+  )
+)}
             </div>
 
             <div>
@@ -462,9 +527,26 @@ export default function EditCarModal({
               <FileUpload
                 accept="image/*,application/pdf"
                 multiple={false}
+                  isPublic={false}
                 onUploadComplete={handleFileRCUpload}
               />
-              {formData.rcBookProof && (
+
+{rcLoading ? (
+  <p>Loading...</p>
+) : rcBookUrl && (
+  formData.rcBookProof.toLowerCase().endsWith(".pdf") ? (
+    <a href={rcBookUrl} target="_blank" rel="noreferrer">
+      View uploaded PDF
+    </a>
+  ) : (
+    <img
+      src={rcBookUrl}
+      alt="RC Book Proof"
+      className="w-28 h-28 object-cover rounded border"
+    />
+  )
+)}
+              {/* {formData.rcBookProof && (
                 <div className="mt-2 text-sm">
                   {formData.rcBookProof.toLowerCase().endsWith('.pdf') ? (
                     <a
@@ -483,7 +565,7 @@ export default function EditCarModal({
                     />
                   )}
                 </div>
-              )}
+              )} */}
             </div>
           </div>
 

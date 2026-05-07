@@ -1,8 +1,8 @@
 // utils/transformCoordinates.ts
 export const transformGeoCoordinates = (geoCar: any) => {
   
-  const lng = geoCar?.location?.coordinates?.coordinates?.[0] ?? null;
-  const lat = geoCar?.location?.coordinates?.coordinates?.[1] ?? null;
+  const lng = geoCar?.location?.coordinates?.[0] ?? null;
+  const lat = geoCar?.location?.coordinates?.[1] ?? null;
     console.log("reachf",lat,lng)
   
     return {

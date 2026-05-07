@@ -380,6 +380,7 @@ const AddNewCarModal: React.FC<AddNewCarModalProps> = ({ isOpen, onClose, onCarA
       <FileUpload 
         accept="image/*"
         multiple={true}
+        isPublic={true}
         maxFiles={5 - formData.images.length} 
         onUploadComplete={(uploadedUrls) => {
           if (Array.isArray(uploadedUrls) && uploadedUrls.length > 0) {
@@ -436,6 +437,7 @@ const AddNewCarModal: React.FC<AddNewCarModalProps> = ({ isOpen, onClose, onCarA
         accept="video/*"
         multiple={false}
         maxFiles={1}
+        isPublic={true}
         onUploadComplete={(uploadedUrl) => {
           if (typeof uploadedUrl === 'string') {
             setFormData(prev => ({ ...prev, videos: [uploadedUrl] }));
@@ -448,14 +450,14 @@ const AddNewCarModal: React.FC<AddNewCarModalProps> = ({ isOpen, onClose, onCarA
 </div>
            <div>
                     <label className="block text-gray-700">Upload Insurance Proof *</label>
-                    <FileUpload accept="image/*,application/pdf" multiple={false} onUploadComplete={handleFileInsuranceUpload} />
+                    <FileUpload accept="image/*,application/pdf" multiple={false} isPublic={false}onUploadComplete={handleFileInsuranceUpload} />
                     {formData.insuranceProof && <p className="text-green-600 mt-1">File uploaded successfully.</p>}
                   </div>
           
 
             <div>
                     <label className="block text-gray-700">Upload RCBook  Proof *</label>
-                    <FileUpload accept="image/*,application/pdf" multiple={false} onUploadComplete={handleFileRCUpload} />
+                    <FileUpload accept="image/*,application/pdf" multiple={false} isPublic={false} onUploadComplete={handleFileRCUpload} />
                     {formData.rcBookProof && <p className="text-green-600 mt-1">File uploaded successfully.</p>}
                   </div>
           

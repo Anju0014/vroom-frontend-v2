@@ -12,10 +12,12 @@ const LocationPicker: React.FC<LocationPickerProps> = ({
   onSelectLocation,
   initialCoordinates,
 }) => {
-  const [position, setPosition] = useState<{ lat: number; lng: number } | null>(
-    initialCoordinates || null
-  );
-
+const [position, setPosition] = useState<{ lat: number; lng: number } | null>(
+  initialCoordinates?.lat != null && initialCoordinates?.lng != null
+    ? { lat: initialCoordinates.lat, lng: initialCoordinates.lng }
+    : null
+);
+  
   const reverseGeocode = async (lat: number, lng: number) => {
     try {
       const data = await getReverseGeocode(lat, lng);
@@ -31,10 +33,28 @@ const LocationPicker: React.FC<LocationPickerProps> = ({
   };
 
   useEffect(() => {
-    if (initialCoordinates) {
-      reverseGeocode(initialCoordinates.lat, initialCoordinates.lng);
-    }
-  }, [initialCoordinates]);
+  if (
+    initialCoordinates &&
+    initialCoordinates.lat != null &&
+    initialCoordinates.lng != null
+  ) {
+    setPosition({
+      lat: initialCoordinates.lat,
+      lng: initialCoordinates.lng,
+    });
+  }
+}, []);
+
+// useEffect(() => {
+//   if (
+//     initialCoordinates &&
+//     initialCoordinates.lat != null &&
+//     initialCoordinates.lng != null
+//   ) {
+//     reverseGeocode(initialCoordinates.lat, initialCoordinates.lng);
+//   }
+// }, [initialCoordinates]);
+
 
   const LocationMarker = () => {
     useMapEvents({
@@ -70,10 +90,10 @@ const LocationPicker: React.FC<LocationPickerProps> = ({
   return (
     <MapContainer
       center={
-        initialCoordinates
-          ? [initialCoordinates.lat, initialCoordinates.lng]
-          : [20.5937, 78.9629]
-      }
+  initialCoordinates?.lat != null && initialCoordinates?.lng != null
+    ? [initialCoordinates.lat, initialCoordinates.lng]
+    : [20.5937, 78.9629]
+}
       zoom={initialCoordinates ? 14 : 5}
       style={{ height: "400px", width: "100%" }}
     >

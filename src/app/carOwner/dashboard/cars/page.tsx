@@ -330,7 +330,20 @@ const handleAvailabilityClick = async (carId: string) => {
                           )}
                         </div>
 
-                        {car.images && car.images.length > 0 ? (
+ {car.images?.length > 0 ? (
+    <Image
+      src={car.images[0]}
+      alt={car.carName}
+      fill
+      style={{ objectFit: "cover" }}
+      unoptimized
+    />
+  ) : (
+    <div className="flex items-center justify-center h-full text-gray-400">
+      No Image Available
+    </div>
+  )}
+                        {/* {car.images && car.images.length > 0 ? (
                           <Image
                             src={car.images[0]}
                             alt={car.carName}
@@ -339,11 +352,12 @@ const handleAvailabilityClick = async (carId: string) => {
                             style={{ objectFit: 'cover' }}
                             priority
                           />
+                          
                         ) : (
                           <div className="flex items-center justify-center h-full text-gray-400">
                             No Image Available
                           </div>
-                        )}
+                        )} */}
                       </div>
                       
                       <div className="p-4">
@@ -417,7 +431,7 @@ const handleAvailabilityClick = async (carId: string) => {
         isOpen={isAddCarOpen}
         onClose={() => setIsAddCarOpen(false)}
         onCarAdded={(newCar: Car) => {
-          setCars([newCar, ...cars]);
+          setCars([...cars,newCar]);
           setTotalCars(prev => prev + 1); 
         }}
       />

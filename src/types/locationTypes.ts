@@ -40,5 +40,5 @@ export interface LocationPickerProps {
     address?: string,
     landmark?: string
   ) => void;
-  initialCoordinates?: { lat: number; lng: number };
+  initialCoordinates?: { lat: number|null; lng: number|null };
 }

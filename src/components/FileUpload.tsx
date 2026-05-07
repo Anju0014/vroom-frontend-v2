@@ -7,13 +7,22 @@ import { Upload, FileText, Video, Image, Loader2, XCircle } from "lucide-react";
 import LoadingButton from "./common/LoadingButton";
 import toast from "react-hot-toast";
 
+// interface FileUploadProps {
+//   onUploadComplete: (uploadedUrls: string[] | string) => void;
+//   accept?: string;
+//   multiple?: boolean;
+//   maxFiles?: number;
+//   children?: React.ReactNode;
+//    uploadId?: string;
+// }
 interface FileUploadProps {
   onUploadComplete: (uploadedUrls: string[] | string) => void;
   accept?: string;
   multiple?: boolean;
   maxFiles?: number;
   children?: React.ReactNode;
-   uploadId?: string;
+  uploadId?: string;
+  isPublic?: boolean; 
 }
 
 export default function FileUpload({
@@ -22,6 +31,7 @@ export default function FileUpload({
   multiple = false,
   maxFiles = 5,
   uploadId,
+  isPublic=true,
 }: FileUploadProps) {
   const [uploading, setUploading] = useState(false);
   const [selectedFiles, setSelectedFiles] = useState<File[]>([]);
@@ -81,12 +91,25 @@ export default function FileUpload({
       for (let i = 0; i < filesToUpload.length; i++) {
         const file = filesToUpload[i];
         //  const { url, key } = await S3Service.getPresignedUrl(file);
-         const { url, key } = await S3Service.getPresignedUploadUrl(file);
-         console.log(url,key);
-        let response=await S3Service.uploadToS3(url, file);
-        console.log(response)
-        // const uploadedUrl = S3Service.getPublicUrl(key);
-         const uploadedUrl =await S3Service.getPresignedViewUrl(key);
+        //  const { url, key } = await S3Service.getPresignedUploadUrl(file);
+        //  console.log(url,key);
+        // let response=await S3Service.uploadToS3(url, file);
+        // console.log(response)
+        // // const uploadedUrl = S3Service.getPublicUrl(key);
+        //  const uploadedUrl =await S3Service.getPresignedViewUrl(key);
+
+         const { uploadUrl, key } = await S3Service.getPresignedUploadUrl(file, isPublic);
+
+await S3Service.uploadToS3(uploadUrl, file);
+
+let uploadedUrl;
+
+if (isPublic) {
+  uploadedUrl = S3Service.getPublicUrl(key);
+} else {
+  // uploadedUrl = await S3Service.getPresignedViewUrl(key);
+  uploadedUrl=key
+}
          console.log(uploadedUrl)
         urls.push(uploadedUrl);
         
