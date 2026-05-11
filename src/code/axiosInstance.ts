@@ -18,9 +18,9 @@ const getStoreByUrl = (url: string) => {
 };
 
 const getRefreshEndpoint = (url: string) => {
-  if (url.startsWith('/admin')||url.includes('/admin')) return '/admin/refreshToken';
-  if (url.startsWith('/owner') || url.startsWith('/carOwner')) return '/owner/refreshToken';
-  return '/refreshToken'; 
+  if (url.startsWith('/admin')||url.includes('/admin')) return '/admin/refresh-token';
+  if (url.startsWith('/owner') || url.startsWith('/carOwner')) return '/owner/refresh-token';
+  return '/refresh-token'; 
 };
 
 
